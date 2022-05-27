@@ -4,6 +4,23 @@ info:
   description: Coordinates API for EnigmaSOI
   version: 1.0.0
 paths:
+  /location/add:
+    post:
+      summary: Add device location
+      operationId: addDeviceLocation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoordinatesCreate'
+      responses:
+        "200":
+          description: OK status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoordinatesDetails'
   /location/{deviceId}:
     get:
       summary: Get device location
@@ -23,12 +40,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CoordinatesDetails'
-  /location/add:
-    post:
-      summary: Add device location
-      operationId: addDeviceLocation
+    put:
+      summary: Update device location
+      operationId: updateDeviceLocation
+      parameters:
+        - in: path
+          name: deviceId
+          description: deviceId
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -37,9 +60,11 @@ paths:
         "200":
           description: OK status
           content:
-            application/json:
+            text/plain:
               schema:
-                $ref: '#/components/schemas/CoordinatesDetails'
+                type: string
+                example: pong
+
 components:
   schemas:
     CoordinatesDetails:

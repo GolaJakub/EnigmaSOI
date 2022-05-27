@@ -3,10 +3,13 @@ package com.example.geoapi.mapper;
 import com.example.geoapi.model.CoordinatesEntity;
 import com.example.openapi.model.CoordinatesCreate;
 import com.example.openapi.model.CoordinatesDetails;
+import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR, builder = @Builder(disableBuilder = true))
 public interface CoordinatesMapper {
 
     CoordinatesMapper API_MAPPER = Mappers.getMapper(CoordinatesMapper.class);
@@ -17,7 +20,9 @@ public interface CoordinatesMapper {
 
     CoordinatesCreate toCoordinatesCreate(CoordinatesDetails coordinatesDetails);
 
+    @Mapping(target = "deviceId", ignore = true)
     CoordinatesDetails toCoordinatesDetails(CoordinatesCreate coordinatesCreate);
 
+    @Mapping(target = "deviceId", ignore = true)
     CoordinatesEntity toCoordinatesEntity(CoordinatesCreate coordinatesCreate);
 }
