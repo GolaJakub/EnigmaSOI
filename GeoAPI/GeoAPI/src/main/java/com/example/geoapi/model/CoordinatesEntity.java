@@ -1,18 +1,22 @@
 package com.example.geoapi.model;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import com.example.geoapi.validators.Location;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "coordinates")
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CoordinatesEntity {
 
     @Id

@@ -25,16 +25,17 @@ public class CoordinatesController implements LocationApi {
 
     @Override
     public ResponseEntity<CoordinatesDetails> getDeviceLocation(@NotNull UUID deviceId) {
+
         return ok(coordinatesService.getDeviceLocation(deviceId));
     }
 
     @Override
-    public ResponseEntity<CoordinatesDetails> addDeviceLocation(CoordinatesCreate coordinatesCreate) {
+    public ResponseEntity<CoordinatesDetails> addDeviceLocation(@NotNull CoordinatesCreate coordinatesCreate) {
         return ok(coordinatesService.addDeviceLocation(coordinatesCreate));
     }
 
     @Override
-    public ResponseEntity<String> updateDeviceLocation(@NotNull UUID deviceId, CoordinatesCreate coordinatesCreate) {
+    public ResponseEntity<String> updateDeviceLocation(@NotNull UUID deviceId, @NotNull CoordinatesCreate coordinatesCreate) {
         coordinatesService.updateDeviceLocation(deviceId, coordinatesCreate);
         return ok("updated");
     }
