@@ -24,7 +24,7 @@ public class CoordinatesService {
 
 
     public CoordinatesDetails getDeviceLocation(@NotNull UUID deviceId) {
-        log.info("Getting");
+        log.info("Getting location for device: " + deviceId);
         CoordinatesEntity coordinates = coordinatesRepository.findById(deviceId).orElseThrow(() -> new DeviceNotFoundException(deviceId));
 
         log.info("Got device coordinates {} ", coordinates);
@@ -47,9 +47,6 @@ public class CoordinatesService {
             log.info("Invalid coordinates, can't add device location to database");
             throw new InvalidCoordinatesException();
         }
-
-
-
 
     }
 
