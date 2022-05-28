@@ -1,17 +1,15 @@
 package com.example.geoapi.service;
 
 import com.example.geoapi.exception.DeviceNotFoundException;
+import com.example.geoapi.exception.InvalidCoordinatesException;
 import com.example.geoapi.model.CoordinatesEntity;
 import com.example.geoapi.repository.CoordinatesRepository;
-import com.example.geoapi.validators.Location;
 import com.example.openapi.model.CoordinatesCreate;
 import com.example.openapi.model.CoordinatesDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
@@ -35,23 +33,50 @@ public class CoordinatesService {
     }
 
     public CoordinatesDetails addDeviceLocation(CoordinatesCreate coordinatesCreate) {
-
         log.info("Adding coordinates: {}",coordinatesCreate);
 
-        CoordinatesEntity coordinatesEntity =
-                coordinatesRepository.save(API_MAPPER.toCoordinatesEntity(coordinatesCreate));
+        if (isValid(coordinatesCreate)){
+            CoordinatesEntity coordinatesEntity =
+                    coordinatesRepository.save(API_MAPPER.toCoordinatesEntity(coordinatesCreate));
 
-        log.info("Added device with id: {}", coordinatesEntity.getDeviceId());
-        return API_MAPPER.toCoordinatesDetails(coordinatesEntity);
+            log.info("Added device with id: {}", coordinatesEntity.getDeviceId());
+            return API_MAPPER.toCoordinatesDetails(coordinatesEntity);
+
+        }
+        else{
+            log.info("Invalid coordinates, can't add device location to database");
+            throw new InvalidCoordinatesException();
+        }
+
+
+
+
     }
 
-    public void updateDeviceLocation(@NotNull UUID deviceId, CoordinatesCreate coordinatesCreate) {
+    public String updateDeviceLocation(@NotNull UUID deviceId, @NotNull CoordinatesCreate coordinatesCreate) {
         log.info("Updating device with id: {}", deviceId);
-        CoordinatesEntity coordinates = coordinatesRepository.findById(deviceId).orElseThrow(() -> new DeviceNotFoundException(deviceId));
-        coordinates.setLatitude(coordinatesCreate.getLatitude());
-        coordinates.setLongitude(coordinatesCreate.getLongitude());
-        coordinatesRepository.save(coordinates);
-        log.info("Updated device with id: {}", deviceId);
+        if (isValid(coordinatesCreate)){
+            CoordinatesEntity coordinates = coordinatesRepository.findById(deviceId).orElseThrow(() -> new DeviceNotFoundException(deviceId));
+            coordinates.setLatitude(coordinatesCreate.getLatitude());
+            coordinates.setLongitude(coordinatesCreate.getLongitude());
+            coordinatesRepository.save(coordinates);
+            log.info("Updated device with id: {}", deviceId);
+            return "Updated device with id: " + deviceId;
+        }
+        else{
+            log.info("Invalid coordinates, can't update device location in database");
+            throw new InvalidCoordinatesException();
+        }
+
+    }
+
+    public boolean isValid(CoordinatesCreate coordinatesCreate){
+        if (coordinatesCreate != null){
+            return coordinatesCreate.getLatitude().matches("^([+-])?(?:90(?:\\.0{1,6})?|((?:|[1-8])[0-9])(?:\\.[0-9]{1,6})?)$")
+                    &&
+                    coordinatesCreate.getLongitude().matches("^([+-])?(?:180(?:\\.0{1,6})?|((?:|[1-9]|1[0-7])[0-9])(?:\\.[0-9]{1,6})?)$");
+        }
+        return true;
     }
 
 

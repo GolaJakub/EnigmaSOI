@@ -1,9 +1,9 @@
 package com.example.geoapi.model;
 
 
-import com.example.geoapi.validators.Location;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -25,9 +25,9 @@ public class CoordinatesEntity {
     @Column(length = 36, nullable = false, updatable = false)
     private UUID deviceId;
 
-    @NotBlank
+    @NotBlank(message = "latitude can't be blank")
     private String latitude;
-    @NotBlank
+    @NotBlank(message = "longitude can't be blank")
     private String longitude;
 
 }
