@@ -2,7 +2,7 @@
 
 ## Setup:
 - Java 17
-- Windows 10
+- Windows 10 / MacOS Monterey
 
 ## Task 1: Utworzenie abstrakcji klas drzewa liściastego i iglastego
 #### Projekt implementuje klase abstrakcyjną Tree z metodą grow() : void oraz metodą introduceYourself() : String oraz dwie dziedziczące podklasy z polami trunk,branches oraz roots.
@@ -10,3 +10,13 @@
 #### Metoda introduceYourself() zwraca odpowiedni komunikat w zależności od klasy w której się znajduje.
 
 
+
+## Task 2: Utworzenie wydajnej usługi REST, której zadaniem będzie odbieranie i zapisywanie informacji o geolokalizacji urządzeń mobilnych.
+#### - Stworzona została baza danych PostgreSQL, która przechowuję dane lokalizacyjne urządzeń w formie jednej tabeli o nazwie coordinates.
+#### - Tabela składa się z 3 pól: deviceId (UUID), latitude(string) i longitude(string).
+#### - Została utworzona usługa REST, dająca możliwość dodawania, aktualizacji oraz pobierania lokalizacji urządzenia z bazy danych.
+#### - Została zaimplementowana walidacja parametrów (latitude i longitude) poprzez użycie patternu który dopuszcza liczby od -90 do +90 dla latitude i od -180 do +180 dla longitude z sześcioma miejscami po przecinku. 
+#### - Zostały dodane własne exceptiony: deviceNotFoundException i invalidCoordinatesException.
+#### - Został dodany Logger Log4j2 z logowaniem w konsoli i do pliku logs.log.
+#### - Został użyty swagger-ui (openAPI w .yml).
+#### - Zostały dodane testy jednostkowe sprawdzające poprawne działanie endpointów.
